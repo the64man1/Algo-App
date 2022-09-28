@@ -1,6 +1,13 @@
 import React, { SyntheticEvent, useEffect, useState } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import {
+  Routes,
+  Route,
+  Link,
+  useNavigate
+} from "react-router-dom";
+import Home from "./Home.page";
+import Problem from "./Problem.page";
 import { Box, Container, Toolbar, AppBar, Typography, Drawer, Accordion, AccordionSummary, AccordionDetails, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
@@ -8,6 +15,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 function App() {
   const [categories, setCategories] = useState<any[]>([]);
   const [expanded, setExpanded] = useState<string | false>(false);
+  const navigate = useNavigate();
 
   const handleTabChange = 
     (tab: string) => (event: SyntheticEvent, isExpanded: boolean) => {
@@ -28,67 +36,39 @@ function App() {
       )
   }, [])
 
-  console.log(categories)
+  const navigateProblem = (name: String) => {
+    navigate(`/problem/${name}`);
+    setExpanded(false);
+  }
 
   return (
-    // <div className="App">
-    //   <header className="App-header">
-    //     <img src={logo} className="App-logo" alt="logo" />
-    //     <p>
-    //       Edit <code>src/App.tsx</code> and save to reload.
-    //     </p>
-    //     <ul>
-    //       {categories.map(({_id, category, problems}) => {
-    //         return (
-    //           <div key={_id}>
-    //             <div>{category}</div>
-    //             {problems.map((problem: String, index: number) => {
-    //               return <li key={index}>{problem}</li>
-    //             })}
-    //           </div>
-    //         )
-    //       })}
-    //     </ul>
-    //     <a
-    //       className="App-link"
-    //       href="https://reactjs.org"
-    //       target="_blank"
-    //       rel="noopener noreferrer"
-    //     >
-    //       Learn React
-    //     </a>
-    //   </header>
-    // </div>
     <Container>
-      <Box sx={{ display: 'flex' }}>
-        <AppBar sx={{ position: 'absolute', width: '100%', zIndex: '1400' }}>
-          <Toolbar>
-            <Typography sx={{ p: 3 }} variant="h3">
-              My Algo App
-            </Typography>
-          </Toolbar>
-        </AppBar>
-      </Box>
-      <Box>
-        <Toolbar sx={{ height: '105px'}} />
-        <Typography sx={{ padding: '50px'}} paragraph>
-          This is where my content will go
-        </Typography>
-        <Typography sx={{ padding: '50px'}} paragraph>
-          More stuff here
-        </Typography>
-      </Box>
+      <Link to="/" onClick={() => setExpanded(false)}>
+        <Box sx={{ display: 'flex' }}>
+            <AppBar sx={{ position: 'absolute', width: '100%', zIndex: '1400' }}>
+              <Toolbar>
+                <Typography sx={{ p: 3 }} variant="h3">
+                  My Algo App
+                </Typography>
+              </Toolbar>
+            </AppBar>
+        </Box>
+      </Link>
+      <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/problem/:name" element={<Problem />} />
+      </Routes>
       <Drawer variant="permanent" anchor="right">
         <Toolbar sx={{ height: '105px'}} />
         {categories.map(({_id, category, problems}) => {
-          return <Accordion key={_id} expanded={expanded === category} onChange={handleTabChange(category)}>
+          return <Accordion key={_id} sx={{ width: '200px'}} expanded={expanded === category} onChange={handleTabChange(category)}>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
               <Typography>{category}</Typography>
             </AccordionSummary>
             <AccordionDetails>
               <List>
                 {problems.map((problem: String, index: number) => {
-                  return <ListItemButton key={index}>
+                  return <ListItemButton key={index} onClick={() => navigateProblem(problem)}>
                     <ListItemIcon>
                       <ChevronLeftIcon />
                     </ListItemIcon>

@@ -4,7 +4,7 @@ const ProblemSchema = new mongoose.Schema({
     name: String,
     description: String,
     pseudocode: String,
-    inputs: Number,
+    inputs: [String],
     info: String,
     samples: [Object]
 });

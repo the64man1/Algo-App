@@ -27,16 +27,15 @@ app.post("/add_problem/:category", async (req, res) => {
 });
 
 app.get("/categories", async (req, res) => {
-    const categories = await Category.find({});
-
     try {
+        const categories = await Category.find({});
         res.send(categories);
     } catch (error) {
         res.status(500).send(error);
     }
 });
 
-app.post("/string/valid_palindrome", async (req, res) => {
+app.post("/valid_palindrome", async (req, res) => {
     const isPalindrome = (s) => {
         s = s.toLowerCase().split('').filter(char => ((char.charCodeAt() > 96) && (char.charCodeAt() < 123)) ||
         ((char.charCodeAt() > 47) && (char.charCodeAt() < 58)));
@@ -61,8 +60,14 @@ app.post("/string/valid_palindrome", async (req, res) => {
     }
 });
 
-// app.get("/:category/:problemName", async (req, res) => {
-//     const problem = await Category.find({ category: req.params.category, })
-// });
+app.get("/problem/:name", async (req, res) => {
+    
+    try {
+        const problem = await Problem.find(req.params);
+        res.send(problem);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+})
 
 module.exports = app;
