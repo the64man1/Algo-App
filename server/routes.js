@@ -53,12 +53,50 @@ app.post("/valid_palindrome", async (req, res) => {
     }
     
     try {
-        const answer = isPalindrome(req.body.string);
+        const answer = isPalindrome(req.body.String);
         res.send(answer);
     } catch (error) {
         res.status(500).send(error);
     }
 });
+
+app.post("/longest_substring_without_repeating_characters", async (req, res) => {
+    const longestSubstring = (s) => {
+        if (s.length <= 1) return s.length;
+        if (s.length === 2) return s[0] === s[1] ? 1 : 2;
+        let left = 0;
+        let right = 1;
+        while (s[left] === s[right]) {
+            if (right === s.length - 1) return s[left] === s[right] ? 1 : 2;
+            left++;
+            right++;
+        }
+        let longest = 2;
+        const set = new Set();
+        set.add(s[left]);
+        while (right < s.length) {
+            if (s[right] === s[right-1]) {
+                set.clear();
+                left = right;
+            }
+            while (set.has(s[right])) {
+                set.delete(s[left]);
+                left++;
+            }
+            set.add(s[right]);
+            longest = Math.max(longest, right - left + 1);
+            right++;
+        }
+        return longest;        
+    }
+
+    try {
+        const answer = longestSubstring(req.body.String);
+        res.send(answer);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+}); 
 
 app.get("/problem/:name", async (req, res) => {
     

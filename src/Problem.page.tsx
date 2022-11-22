@@ -12,6 +12,7 @@
 import { Box, Toolbar, Typography, Card, CardHeader, CardContent, TextField, Button } from "@mui/material";
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { snakeCase } from 'snake-case';
 
 export default function Problem() {
     class inputObject {
@@ -23,6 +24,7 @@ export default function Problem() {
     const { name } = useParams();
     const [problem, setProblem] = useState({name: '', description: '', pseudocode: '', info: '', inputs: [], samples: []});
     const [userInput, setUserInput] = useState([{label: '', val: ''}]);
+    const [response, setResponse] = useState('')
 
     useEffect(() => {
         setUserInput([{label: '', val: ''}]);
@@ -58,6 +60,32 @@ export default function Problem() {
         setUserInput(data);
     }
 
+    const submitInput = () => {
+        let formData : any = new Object();
+        userInput.forEach((input: inputObject) => {
+            formData[input.label] = input.val;
+        })
+        const headers = { 'Content-Type': 'application/json' };
+        const body = JSON.stringify(formData);
+        const snakeName = snakeCase(name as string)
+        fetch(`http://localhost:5000/${snakeName}`, {
+            method: "POST",
+            headers: headers,
+            body: body
+        })
+        .then(res => res.json())
+        .then(
+          (result) => {
+            console.log(result);
+            setResponse(result.toString());
+            console.log(response.length);
+          },
+          (error) => {
+            console.log(error);
+          }
+        )
+    }
+
     return (
         <Box>
             <Toolbar sx={{ height: '115px'}} />
@@ -70,7 +98,12 @@ export default function Problem() {
                             <TextField sx={{ marginBottom: '10px'}} key={index} variant="outlined" size="small" label={label} value={val} onChange={event => handleInputChange(event.target.value, index)} />
                         </Box>
                     })}
-                    <Button sx={{ marginTop: '5px' }} variant="contained" onClick={() => console.log(userInput)}>Go</Button>
+                    {response.length > 0 &&
+                    <Box>
+                        <TextField value={response}/>
+                    </Box>
+                    }
+                    <Button sx={{ marginTop: '5px' }} variant="contained" onClick={() => submitInput()}>Go</Button>
                 </CardContent>
             </Card>
         </Box>
