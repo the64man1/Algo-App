@@ -11,7 +11,7 @@ const connString = process.env.ATLAS_URI;
 const app = express();
 
 app.use(express.json());
-app.use(cors());
+//app.use(cors());
 
 app.use(express.static(path.resolve(__dirname, '../build')));
 
