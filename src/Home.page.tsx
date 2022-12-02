@@ -5,10 +5,10 @@ export default function Home() {
     <Box>
         <Toolbar sx={{ height: '105px'}} />
         <Typography sx={{ padding: '50px'}} paragraph>
-        This is where my content will go
+        This is MERN stack application to demonstrate my skills in building a simple full-stack web application, as well as showcase my solutions to algorithm exercises that commonly appear during technical interview processes.
         </Typography>
         <Typography sx={{ padding: '50px'}} paragraph>
-        More stuff here
+        More to come, keep checking back for updates!
         </Typography>
     </Box>)
 }
