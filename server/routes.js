@@ -35,6 +35,100 @@ app.get("/categories", async (req, res) => {
     }
 });
 
+app.post("/best_time_to_buy_and_sell_stock", (req, res) => {
+    var maxProfit = (prices) => {
+        let max = 0;
+        let left = 0;
+        let right = 1;
+        while (right < prices.length) {
+            if (prices[right] < prices[left]) {
+                left = right;
+            } else {
+                max = Math.max(max, prices[right] - prices[left]);
+            }
+            right++;
+        }
+        return max;
+    };
+
+    try {
+        const input = JSON.parse(req.body)
+        const answer = maxProfit(input.Array);
+        res.send(answer);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+})
+
+app.post("/maximum_subarray", (req, res) => {
+    var maxSubArray = (nums) => {
+        let maxSum = nums[0];
+        let tempSum = maxSum;
+        for (let i = 1; i < nums.length; i++) {
+            tempSum = Math.max(tempSum + nums[i], nums[i]);
+            maxSum = Math.max(tempSum, maxSum);
+        }
+        return maxSum;
+    };
+
+    try {
+        const answer = maxSubArray(req.body.Array);
+        res.send(answer);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+})
+
+app.post("/container_with_most_water", (req, res) => {
+    var maxArea = (height) => {
+        let left = 0;
+        let right = height.length - 1;
+        let smaller, temp;
+        let max = 0;
+        
+        while (left < right) {
+            smaller = Math.min(height[left], height[right]);
+            temp = smaller * (right - left);
+            max = Math.max(max, temp);
+            if (height[left] < height[right]) left++;
+            else right--;
+        }
+        
+        return max;
+    };
+
+    try {
+        const answer = maxArea(req.body.Array);
+        res.send(answer);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+})
+
+app.post("/product_of_array_except_self", (req, res) => {
+    var productExceptSelf = (nums) => {
+        let product = nums.reduce((a,b) => a * b);
+        let answer = [];
+        let temp;
+        for (let i = 0; i < nums.length; i++) {
+            if (nums[i] === 0) {
+                temp = nums.slice(0, i).concat(nums.slice(i+1));
+                answer.push(temp.reduce((a,b) => a * b));
+            } else {
+                answer.push(product * Math.pow(nums[i], -1));
+            }
+        }
+        return answer;
+    };
+
+    try {
+        const answer = productExceptSelf(req.body.Array);
+        res.send(answer);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+})
+
 app.post("/valid_palindrome", async (req, res) => {
     const isPalindrome = (s) => {
         s = s.toLowerCase().split('').filter(char => ((char.charCodeAt() > 96) && (char.charCodeAt() < 123)) ||

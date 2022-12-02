@@ -26,6 +26,18 @@ export default function Problem() {
     const [userInput, setUserInput] = useState([{label: '', val: ''}]);
     const [response, setResponse] = useState('')
 
+    const createInputFieldsArray = (arr: [string]) => {
+        let data: inputObject[] = [];
+        arr.forEach((lab: string) => {
+            const field: inputObject = {
+                label: lab,
+                val: ''
+            }
+            data.push(field);
+        })
+        setUserInput(data);
+    }
+
     useEffect(() => {
         setUserInput([{label: '', val: ''}]);
         const headers = { 'Content-Type': 'application/json' }
@@ -42,18 +54,6 @@ export default function Problem() {
           )
       }, [name])
 
-    const createInputFieldsArray = (arr: [string]) => {
-        let data: inputObject[] = [];
-        arr.forEach((lab: string) => {
-            const field: inputObject = {
-                label: lab,
-                val: ''
-            }
-            data.push(field);
-        })
-        setUserInput(data);
-    }
-
     const handleInputChange = (input: string, idx: number) => {
         let data = [...userInput];
         data[idx].val = input;
@@ -61,9 +61,14 @@ export default function Problem() {
     }
 
     const submitInput = () => {
-        let formData : any = new Object();
+        let formData : any = {};
         userInput.forEach((input: inputObject) => {
-            formData[input.label] = input.val;
+            if (input.label === "Array") {
+                formData[input.label] = JSON.parse(input.val);
+            } else {
+                formData[input.label] = input.val;
+            }
+            
         })
         const headers = { 'Content-Type': 'application/json' };
         const body = JSON.stringify(formData);
@@ -76,9 +81,8 @@ export default function Problem() {
         .then(res => res.json())
         .then(
           (result) => {
-            console.log(result);
+            console.log(typeof result)
             setResponse(result.toString());
-            console.log(response.length);
           },
           (error) => {
             console.log(error);
