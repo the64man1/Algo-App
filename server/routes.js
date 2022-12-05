@@ -190,7 +190,74 @@ app.post("/longest_substring_without_repeating_characters", async (req, res) => 
     } catch (error) {
         res.status(500).send(error);
     }
-}); 
+});
+
+app.post("longest_palindromic_substring", (req, res) => {
+    var longestPalindrome = function(s) {
+        if (s.length === 1) return s[0];
+        let left, right;
+        let longest = s[0];
+        for (let i = 0.5; i < s.length; i += 0.5) {
+            if (Number.isInteger(i)) {
+                left = i - 1;
+                right = i + 1;
+            } else {
+                left = i - 0.5;
+                right = i + 0.5;
+            }
+            while (s[left] === s[right] && left >= 0 && right < s.length) {
+                if (longest.length < (right - left + 1)) longest = s.slice(left, right + 1);
+                left--;
+                right++;
+            }
+        }
+        return longest;
+    };
+
+    try {
+        const answer = longestPalindrome(req.body.String);
+        res.send(answer);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+})
+
+app.post("minimum_window_substring", (req, res) => {
+    var minWindow = function(s, t) {
+        if (t.length > s.length) return "";
+        if (t.length === 1) {
+            return s.indexOf(t) !== -1 ? t : "";
+        }
+        
+        let tMap = new Array(123).fill(0);
+        let sMap = new Array(123).fill(0);
+        
+        for (const i in t) tMap[t.charCodeAt(i)]++;
+        
+        let indexes, min = Infinity, left = 0, right = 1;
+        sMap[s.charCodeAt(left)]++;
+        while (right < s.length) {
+            sMap[s.charCodeAt(right)]++;
+            while (tMap.every((char, idx) => char <= sMap[idx])) {
+                if (right - left + 1 < min) {
+                    min = right - left + 1;
+                    indexes = [left, right];
+                }
+                sMap[s.charCodeAt(left)]--;
+                left++;
+            }
+            right++;
+        }
+        return indexes ? s.slice(indexes[0],indexes[1]+1) : "";
+    };
+
+    try {
+        const answer = minWindow(req.body.String1, req.body.String2);
+        res.send(answer);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+})
 
 app.get("/problem/:name", async (req, res) => {
     
