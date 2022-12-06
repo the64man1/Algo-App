@@ -192,7 +192,7 @@ app.post("/longest_substring_without_repeating_characters", async (req, res) => 
     }
 });
 
-app.post("longest_palindromic_substring", (req, res) => {
+app.post("/longest_palindromic_substring", async (req, res) => {
     var longestPalindrome = function(s) {
         if (s.length === 1) return s[0];
         let left, right;
