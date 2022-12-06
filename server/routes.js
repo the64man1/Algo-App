@@ -35,6 +35,16 @@ app.get("/categories", async (req, res) => {
     }
 });
 
+app.get("/problem/:name", async (req, res) => {
+    
+    try {
+        const problem = await Problem.find(req.params);
+        res.send(problem);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+})
+
 app.post("/best_time_to_buy_and_sell_stock", (req, res) => {
     var maxProfit = (prices) => {
         let max = 0;
@@ -222,7 +232,7 @@ app.post("/longest_palindromic_substring", async (req, res) => {
     }
 })
 
-app.post("minimum_window_substring", (req, res) => {
+app.post("/minimum_window_substring", (req, res) => {
     var minWindow = function(s, t) {
         if (t.length > s.length) return "";
         if (t.length === 1) {
@@ -259,11 +269,52 @@ app.post("minimum_window_substring", (req, res) => {
     }
 })
 
-app.get("/problem/:name", async (req, res) => {
-    
+app.post("/reverse_linked_list", (req, res) => {
+    var reverseList = function(head) {
+        if (!head) return head;
+        let node = head;
+        let prev = null;
+        let next;
+        while (node) {
+            next = node.next;
+            node.next = prev;
+            prev = node;
+            node = next;
+        }
+        return prev;
+    };
+
     try {
-        const problem = await Problem.find(req.params);
-        res.send(problem);
+        const answer = reverseList(req.body.List);
+        res.send(answer);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+})
+
+app.post("/remove_nth_node_from_end_of_list", (req, res) => {
+    var removeNthFromEnd = function(head, n) {
+        let count = 0, node = head;
+        while (node) {
+            count++;
+            node = node.next;
+        }
+        let fromStart = count - n;
+        if (fromStart === 0) return head.next;
+        node = head;
+        while (true) {
+            if (--fromStart === 0) {
+                if (!node.next.next) node.next = null;
+                else node.next = node.next.next;
+                return head;
+            }
+            node = node.next;
+        }
+    };
+
+    try {
+        const answer = removeNthFromEnd(req.body.List, req.body.Number);
+        res.send(answer);
     } catch (error) {
         res.status(500).send(error);
     }
