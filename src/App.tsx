@@ -24,7 +24,7 @@ function App() {
 
   useEffect(() => {
     const headers = { 'Content-Type': 'application/json' }
-    fetch('http://localhost:5000/categories', { headers })
+    fetch('/categories', { headers })
       .then(res => res.json())
       .then(
         (result) => {

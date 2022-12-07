@@ -42,7 +42,7 @@ export default function Problem() {
         setUserInput([{label: '', val: ''}]);
         setResponse('');
         const headers = { 'Content-Type': 'application/json' }
-        fetch(`http://localhost:5000/problem/${name}`, { headers })
+        fetch(`/problem/${name}`, { headers })
           .then(res => res.json())
           .then(
             (result) => {
@@ -74,7 +74,7 @@ export default function Problem() {
         const headers = { 'Content-Type': 'application/json' };
         const body = JSON.stringify(formData);
         const snakeName = snakeCase(name as string)
-        fetch(`http://localhost:5000/${snakeName}`, {
+        fetch(`/${snakeName}`, {
             method: "POST",
             headers: headers,
             body: body
