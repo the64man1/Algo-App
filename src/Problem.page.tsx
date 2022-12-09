@@ -24,7 +24,8 @@ export default function Problem() {
     const { name } = useParams();
     const [problem, setProblem] = useState({name: '', description: '', pseudocode: '', info: '', inputs: [], samples: []});
     const [userInput, setUserInput] = useState([{label: '', val: ''}]);
-    const [response, setResponse] = useState('')
+    const [response, setResponse] = useState('');
+    let valid = true;
 
     const createInputFieldsArray = (arr: [string]) => {
         let data: inputObject[] = [];
@@ -62,6 +63,10 @@ export default function Problem() {
     }
 
     const submitInput = () => {
+        if (userInput[0].val.length === 0) {
+            valid = false;
+            return;
+        }
         let formData : any = {};
         userInput.forEach((input: inputObject) => {
             if (input.label === "Array") {
@@ -100,7 +105,7 @@ export default function Problem() {
                 <CardContent>
                     {userInput.map(({label, val}, index: number) => {
                         return <Box>
-                            <TextField sx={{ marginBottom: '10px'}} key={index} variant="outlined" size="small" label={label} value={val} onChange={event => handleInputChange(event.target.value, index)} />
+                            <TextField sx={{ marginBottom: '10px'}} error={!valid} key={index} variant="outlined" size="small" label={label} value={val} onChange={event => handleInputChange(event.target.value, index)} />
                         </Box>
                     })}
                     {response.length > 0 &&
