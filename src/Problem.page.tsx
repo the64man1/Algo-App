@@ -25,7 +25,7 @@ export default function Problem() {
     const [problem, setProblem] = useState({name: '', description: '', pseudocode: '', info: '', inputs: [], samples: []});
     const [userInput, setUserInput] = useState([{label: '', val: ''}]);
     const [response, setResponse] = useState('');
-    let valid = true;
+    const [valid, setValid] = useState(true);
 
     const createInputFieldsArray = (arr: [string]) => {
         let data: inputObject[] = [];
@@ -48,7 +48,8 @@ export default function Problem() {
           .then(
             (result) => {
               setProblem(result[0]);
-              createInputFieldsArray(result[0].inputs)
+              createInputFieldsArray(result[0].inputs);
+              setValid(true);
             },
             (error) => {
               console.log(error);
@@ -60,11 +61,12 @@ export default function Problem() {
         let data = [...userInput];
         data[idx].val = input;
         setUserInput(data);
+        setValid(true);
     }
 
     const submitInput = () => {
         if (userInput[0].val.length === 0) {
-            valid = false;
+            setValid(false);
             return;
         }
         let formData : any = {};
@@ -105,7 +107,7 @@ export default function Problem() {
                 <CardContent>
                     {userInput.map(({label, val}, index: number) => {
                         return <Box>
-                            <TextField sx={{ marginBottom: '10px'}} error={!valid} key={index} variant="outlined" size="small" label={label} value={val} onChange={event => handleInputChange(event.target.value, index)} />
+                            <TextField sx={{ marginBottom: '10px'}} error={!valid} key={index} helperText={!valid && `Please enter a valid ${label.toLowerCase()}`} variant="outlined" size="small" label={label} value={val} onChange={event => handleInputChange(event.target.value, index)} />
                         </Box>
                     })}
                     {response.length > 0 &&
