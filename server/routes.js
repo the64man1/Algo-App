@@ -196,7 +196,7 @@ app.post("/longest_substring_without_repeating_characters", async (req, res) => 
 
     try {
         const answer = longestSubstring(req.body.String);
-        res.send(answer);
+        res.send(JSON.stringify(answer));
     } catch (error) {
         res.status(500).send(error);
     }
@@ -226,7 +226,7 @@ app.post("/longest_palindromic_substring", async (req, res) => {
 
     try {
         const answer = longestPalindrome(req.body.String);
-        res.send(answer);
+        res.send(JSON.stringify(answer));
     } catch (error) {
         res.status(500).send(error);
     }
@@ -263,7 +263,7 @@ app.post("/minimum_window_substring", (req, res) => {
 
     try {
         const answer = minWindow(req.body.String1, req.body.String2);
-        res.send(answer);
+        res.send(JSON.stringify(answer));
     } catch (error) {
         res.status(500).send(error);
     }
