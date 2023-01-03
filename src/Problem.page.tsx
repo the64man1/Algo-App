@@ -111,8 +111,8 @@ export default function Problem() {
                         </Box>
                     })}
                     {response.length > 0 &&
-                    <Box>
-                        <TextField value={response}/>
+                    <Box sx={{ ml: 2 }}>
+                        <TextField label="Result" InputProps={{ readOnly: true, }} variant="standard" value={response}/>
                     </Box>
                     }
                     <Button sx={{ marginTop: '5px' }} variant="contained" onClick={() => submitInput()}>Go</Button>
