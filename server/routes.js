@@ -1,5 +1,5 @@
 const { Category, Problem } = require("./models");
-const { arrayToLinkedList } = require("./helpers")
+const { arrayToLinkedList, linkedListToArray } = require("./helpers")
 
 const express = require("express");
 const app = express();
@@ -286,9 +286,11 @@ app.post("/reverse_linked_list", (req, res) => {
     };
 
     try {
+        //TODO: test functionality
         const linkedList = arrayToLinkedList(req.body.Array)
         const answer = reverseList(linkedList);
-        res.send(answer);
+        const arr = linkedListToArray(answer);
+        res.send(JSON.stringify(arr));
     } catch (error) {
         res.status(500).send(error);
     }
