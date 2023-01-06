@@ -287,7 +287,7 @@ app.post("/reverse_linked_list", (req, res) => {
 
     try {
         //TODO: test functionality
-        const linkedList = arrayToLinkedList(req.body.Array)
+        const linkedList = arrayToLinkedList(req.body.Array);
         const answer = reverseList(linkedList);
         const arr = linkedListToArray(answer);
         res.send(JSON.stringify(arr));
@@ -317,8 +317,10 @@ app.post("/remove_nth_node_from_end_of_list", (req, res) => {
     };
 
     try {
-        const answer = removeNthFromEnd(req.body.List, req.body.Number);
-        res.send(answer);
+        const linkedList = arrayToLinkedList(req.body.Array);
+        const answer = removeNthFromEnd(linkedList, req.body.Number);
+        const arr = linkedListToArray(answer);
+        res.send(JSON.stringify(arr));
     } catch (error) {
         res.status(500).send(error);
     }
